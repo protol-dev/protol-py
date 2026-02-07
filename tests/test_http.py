@@ -5,9 +5,9 @@ from __future__ import annotations
 import pytest
 import httpx
 
-from agent_os._http import HttpClient, AsyncHttpClient, _build_headers, _handle_error_response
-from agent_os.constants import SDK_VERSION
-from agent_os.exceptions import (
+from protol._http import HttpClient, AsyncHttpClient, _build_headers, _handle_error_response
+from protol.constants import SDK_VERSION
+from protol.exceptions import (
     AuthenticationError,
     NetworkError,
     NotFoundError,
@@ -24,7 +24,7 @@ class TestBuildHeaders:
 
     def test_headers_contain_user_agent(self):
         headers = _build_headers("test_key")
-        assert headers["User-Agent"] == f"agent-os-python/{SDK_VERSION}"
+        assert headers["User-Agent"] == f"protol-py/{SDK_VERSION}"
 
     def test_headers_contain_content_type(self):
         headers = _build_headers("test_key")

@@ -1,13 +1,13 @@
-"""Shared fixtures for AgentOS SDK tests."""
+"""Shared fixtures for Protol SDK tests."""
 
 from __future__ import annotations
 
 import pytest
 from datetime import datetime, timezone
 
-from agent_os.client import AgentOS
-from agent_os.agent import Agent
-from agent_os.models import (
+from protol.client import Protol
+from protol.agent import Agent
+from protol.models import (
     ActionResponse,
     AgentArchitecture,
     AgentProfile,
@@ -190,8 +190,8 @@ def sample_action_response(sample_action_response_dict):
 
 @pytest.fixture
 def aos_local():
-    """AgentOS client in local mode."""
-    client = AgentOS(api_key="test_local_key", local_mode=True)
+    """Protol client in local mode."""
+    client = Protol(api_key="test_local_key", local_mode=True)
     yield client
     client.close()
 

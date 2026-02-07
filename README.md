@@ -1,44 +1,44 @@
-# AgentOS Python SDK
+# Protol Python SDK
 
-[![PyPI version](https://img.shields.io/pypi/v/agent-os-sdk.svg)](https://pypi.org/project/agent-os-sdk/)
-[![Python versions](https://img.shields.io/pypi/pyversions/agent-os-sdk.svg)](https://pypi.org/project/agent-os-sdk/)
+[![PyPI version](https://img.shields.io/pypi/v/protol-py.svg)](https://pypi.org/project/protol-py/)
+[![Python versions](https://img.shields.io/pypi/pyversions/protol-py.svg)](https://pypi.org/project/protol-py/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Tests](https://github.com/protol-dev/protol-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/protol-dev/protol-sdk/actions)
+[![Tests](https://github.com/protol-dev/protol-py/actions/workflows/ci.yml/badge.svg)](https://github.com/protol-dev/protol-py/actions)
 
 **The civilization layer for AI agents** — identity, action tracking, and reputation scoring.
 
 ---
 
-## What is AgentOS?
+## What is Protol?
 
 Protol is a platform that provides AI agents with identity, accountability, and trust. Every agent gets a unique identity, every action is tracked, and reputation scores are computed continuously — creating a transparent ecosystem where agents can be evaluated, compared, and trusted.
 
-The `agent-os-sdk` is the Python client library for the Protol platform. It lets you register agents, log actions, query reputation scores, and integrate with frameworks like LangChain and CrewAI in minutes.
+`protol-py` is the Python client library for the Protol platform. It lets you register agents, log actions, query reputation scores, and integrate with frameworks like LangChain and CrewAI in minutes.
 
 ---
 
 ## Installation
 
 ```bash
-pip install agent-os-sdk
+pip install protol-py
 ```
 
 With LangChain integration:
 
 ```bash
-pip install 'agent-os-sdk[langchain]'
+pip install 'protol-py[langchain]'
 ```
 
 With CrewAI integration:
 
 ```bash
-pip install 'agent-os-sdk[crewai]'
+pip install 'protol-py[crewai]'
 ```
 
 All integrations:
 
 ```bash
-pip install 'agent-os-sdk[all]'
+pip install 'protol-py[all]'
 ```
 
 ---
@@ -46,13 +46,13 @@ pip install 'agent-os-sdk[all]'
 ## Quick Start
 
 ```python
-from agent_os import AgentOS
+from protol import Protol
 
 # Initialize (local_mode=True works without a backend)
-aos = AgentOS(api_key="test", local_mode=True)
+p = Protol(api_key="test", local_mode=True)
 
 # Register an agent
-agent = aos.register_agent(
+agent = p.register_agent(
     name="my-research-agent",
     category="research",
     capabilities=["web_research", "summarization"],
@@ -73,7 +73,7 @@ print(f"Agent: {agent.name}")
 print(f"Score: {agent.reputation_score} | Tier: {agent.trust_tier}")
 print(f"Breakdown: {agent.reputation_breakdown()}")
 
-aos.close()
+p.close()
 ```
 
 ---
@@ -81,7 +81,7 @@ aos.close()
 ## Core Concepts
 
 ### Agents
-An agent is any AI system registered with AgentOS. It gets a unique ID, a reputation score, and a full action history.
+An agent is any AI system registered with Protol. It gets a unique ID, a reputation score, and a full action history.
 
 ### Actions
 Actions are everything agents do — tasks completed, APIs called, other agents hired. Every action is logged with status, timing, cost, and hashed I/O (raw data never leaves your system).
@@ -110,7 +110,7 @@ Reputation is computed across 5 dimensions:
 ### Registering Agents
 
 ```python
-agent = aos.register_agent(
+agent = p.register_agent(
     name="my-agent",
     category="research",           # See constants.py for full list
     capabilities=["web_research", "summarization"],
@@ -173,7 +173,7 @@ for snapshot in history:
 ### Searching Agents
 
 ```python
-results = aos.search_agents(
+results = p.search_agents(
     category="research",
     min_reputation=75.0,
     sort_by="reputation",
@@ -186,7 +186,7 @@ for agent_profile in results.agents:
 ### Reporting Incidents
 
 ```python
-aos.report_incident(
+p.report_incident(
     agent_id="agt_abc123def",
     incident_type="hallucination",
     severity="high",
@@ -198,13 +198,13 @@ aos.report_incident(
 ### LangChain Integration
 
 ```python
-from agent_os import AgentOS
-from agent_os.integrations import LangChainWrapper
+from protol import Protol
+from protol.integrations import LangChainWrapper
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
 
-aos = AgentOS(api_key="aos_sk_...", local_mode=True)
-agent = aos.register_agent(
+p = Protol(api_key="aos_sk_...", local_mode=True)
+agent = p.register_agent(
     name="lc-agent", category="writing", capabilities=["summarization"]
 )
 
@@ -218,12 +218,12 @@ result = tracked.invoke({"text": "Your text here..."})
 ### CrewAI Integration
 
 ```python
-from agent_os import AgentOS
-from agent_os.integrations import CrewAIWrapper
+from protol import Protol
+from protol.integrations import CrewAIWrapper
 
-aos = AgentOS(api_key="aos_sk_...", local_mode=True)
-researcher = aos.register_agent(name="researcher", category="research", capabilities=["web_research"])
-writer = aos.register_agent(name="writer", category="writing", capabilities=["content_writing"])
+p = Protol(api_key="aos_sk_...", local_mode=True)
+researcher = p.register_agent(name="researcher", category="research", capabilities=["web_research"])
+writer = p.register_agent(name="writer", category="writing", capabilities=["content_writing"])
 
 tracked_crew = CrewAIWrapper(
     crew=my_crew,
@@ -236,10 +236,10 @@ result = tracked_crew.kickoff(inputs={"topic": "AI agents"})
 ### Async Usage
 
 ```python
-from agent_os import AsyncAgentOS
+from protol import AsyncProtol
 
-async with AsyncAgentOS(api_key="aos_sk_...", local_mode=True) as aos:
-    agent = await aos.register_agent(
+async with AsyncProtol(api_key="aos_sk_...", local_mode=True) as p:
+    agent = await p.register_agent(
         name="async-agent", category="research", capabilities=["test"]
     )
 
@@ -251,14 +251,14 @@ async with AsyncAgentOS(api_key="aos_sk_...", local_mode=True) as aos:
 ### Error Handling
 
 ```python
-from agent_os import AgentOS
-from agent_os.exceptions import (
+from protol import Protol
+from protol.exceptions import (
     AuthenticationError, NotFoundError, RateLimitError, ValidationError
 )
 
 try:
-    aos = AgentOS(api_key="aos_sk_your_key")
-    agent = aos.get_agent("agt_abc123def")
+    p = Protol(api_key="aos_sk_your_key")
+    agent = p.get_agent("agt_abc123def")
 except AuthenticationError:
     print("Invalid API key")
 except NotFoundError:
@@ -274,7 +274,7 @@ except ValidationError as e:
 Local mode lets you use the full SDK without a backend — perfect for development, CI/CD, and demos:
 
 ```python
-aos = AgentOS(api_key="any-key", local_mode=True)
+p = Protol(api_key="any-key", local_mode=True)
 ```
 
 In local mode:
@@ -290,8 +290,8 @@ Set a default environment for all actions:
 
 ```python
 # All actions default to "test" — won't affect production reputation
-aos = AgentOS(api_key="test", local_mode=True, environment="test")
-agent = aos.register_agent(...)
+p = Protol(api_key="test", local_mode=True, environment="test")
+agent = p.register_agent(...)
 
 with agent.action(task_category="research") as act:
     act.success(output="test data")  # environment="test"

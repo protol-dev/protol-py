@@ -1,15 +1,15 @@
-from agent_os import AgentOS
+from protol import Protol
 
-aos = AgentOS(api_key="test", local_mode=True)
+p = Protol(api_key="test", local_mode=True)
 
 # Register two agents in the same category
-good_agent = aos.register_agent(
+good_agent = p.register_agent(
     name="reliable-agent",
     category="research",
     capabilities=["web_research"],
 )
 
-bad_agent = aos.register_agent(
+bad_agent = p.register_agent(
     name="flaky-agent",
     category="research",
     capabilities=["web_research"],
@@ -43,13 +43,13 @@ print(f"BAD AGENT:  {bad_agent.reputation_score:.1f} ({bad_agent.trust_tier})")
 print(f"  {bad_agent.reputation_breakdown()}")
 
 # Search for the best research agent
-results = aos.search_agents(category="research", min_reputation=70.0)
+results = p.search_agents(category="research", min_reputation=70.0)
 print(f"\nAgents with 70+ reputation: {len(results.agents)}")
 for a in results.agents:
     print(f"  {a.name}: {a.reputation.overall_score:.1f}")
 
 # Ecosystem stats
-stats = aos.get_ecosystem_stats()
+stats = p.get_ecosystem_stats()
 print(f"\nEcosystem: {stats.total_agents} agents, {stats.total_actions} actions")
 
-aos.close()
+p.close()

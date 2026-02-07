@@ -5,8 +5,8 @@ from __future__ import annotations
 import pytest
 from datetime import datetime, timezone
 
-from agent_os.action import Action
-from agent_os.exceptions import ActionError
+from protol.action import Action
+from protol.exceptions import ActionError
 
 
 class TestActionContextManager:

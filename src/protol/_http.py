@@ -1,4 +1,4 @@
-"""Internal HTTP client wrapper for the AgentOS SDK.
+"""Internal HTTP client wrapper for the Protol SDK.
 
 NOT part of the public API. Wraps httpx for sync and async HTTP with automatic
 header injection, retries, and error mapping.
@@ -12,8 +12,8 @@ from typing import Any, Dict, Optional
 
 import httpx
 
-from agent_os.constants import DEFAULT_BASE_URL, DEFAULT_MAX_RETRIES, DEFAULT_TIMEOUT, SDK_VERSION
-from agent_os.exceptions import (
+from protol.constants import DEFAULT_BASE_URL, DEFAULT_MAX_RETRIES, DEFAULT_TIMEOUT, SDK_VERSION
+from protol.exceptions import (
     AuthenticationError,
     NetworkError,
     NotFoundError,
@@ -22,14 +22,14 @@ from agent_os.exceptions import (
     ValidationError,
 )
 
-logger = logging.getLogger("agent_os")
+logger = logging.getLogger("protol")
 
 
 def _build_headers(api_key: str) -> dict[str, str]:
     """Build default request headers."""
     return {
         "Authorization": f"Bearer {api_key}",
-        "User-Agent": f"agent-os-python/{SDK_VERSION}",
+        "User-Agent": f"protol-py/{SDK_VERSION}",
         "Content-Type": "application/json",
     }
 
@@ -59,7 +59,7 @@ def _handle_error_response(response: httpx.Response) -> None:
 
 
 class HttpClient:
-    """Synchronous HTTP client for the AgentOS API.
+    """Synchronous HTTP client for the Protol API.
 
     Internal use only. Handles authentication, retries, and error mapping.
     """
@@ -202,7 +202,7 @@ class HttpClient:
 
 
 class AsyncHttpClient:
-    """Asynchronous HTTP client for the AgentOS API.
+    """Asynchronous HTTP client for the Protol API.
 
     Internal use only. Async counterpart of HttpClient.
     """

@@ -1,15 +1,15 @@
 """LangChain integration example.
 
-Install: pip install 'agent-os-sdk[langchain]' langchain-openai
+Install: pip install 'protol-py[langchain]' langchain-openai
 
-This example demonstrates wrapping a LangChain runnable with AgentOS tracking.
+This example demonstrates wrapping a LangChain runnable with Protol tracking.
 Every invoke/batch/stream call is automatically logged as an action.
 """
 
 from __future__ import annotations
 
-from agent_os import AgentOS
-from agent_os.integrations import LangChainWrapper
+from protol import Protol
+from protol.integrations import LangChainWrapper
 
 # --- Minimal mock runnable so the example runs without OpenAI key ---
 from langchain_core.runnables import RunnableLambda  # type: ignore[import-untyped]
@@ -17,8 +17,8 @@ from langchain_core.runnables import RunnableLambda  # type: ignore[import-untyp
 echo_chain = RunnableLambda(lambda x: f"Echo: {x.get('text', '')}")
 
 # --- Initialize ---
-aos = AgentOS(api_key="test", local_mode=True)
-agent = aos.register_agent(
+p = Protol(api_key="test", local_mode=True)
+agent = p.register_agent(
     name="lc-agent",
     category="writing",
     capabilities=["summarization", "text_generation"],
@@ -49,5 +49,5 @@ agent.refresh()
 print(f"\nActions logged: {agent.total_actions}")
 print(f"Reputation: {agent.reputation_score} ({agent.trust_tier})")
 
-aos.close()
+p.close()
 print("\nDone!")

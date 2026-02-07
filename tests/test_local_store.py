@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from agent_os.client import AgentOS
-from agent_os.exceptions import NotFoundError
+from protol.client import Protol
+from protol.exceptions import NotFoundError
 
 
 class TestLocalStoreBasics:

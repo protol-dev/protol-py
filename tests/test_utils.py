@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from agent_os._utils import (
+from protol._utils import (
     calculate_size_bytes,
     hash_data,
     truncate,
@@ -50,7 +50,7 @@ class TestHashData:
         assert h1 != h2
 
     def test_hash_pydantic_model(self):
-        from agent_os.models import ActionRating
+        from protol.models import ActionRating
 
         rating = ActionRating(rating=5, feedback="great")
         h = hash_data(rating)

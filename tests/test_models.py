@@ -5,7 +5,7 @@ from __future__ import annotations
 import pytest
 from datetime import datetime, timezone
 
-from agent_os.models import (
+from protol.models import (
     ActionRating,
     ActionRecord,
     ActionResponse,

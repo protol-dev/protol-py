@@ -5,8 +5,8 @@ from __future__ import annotations
 import pytest
 from unittest.mock import MagicMock, AsyncMock
 
-import agent_os.integrations.langchain as _lc_mod
-from agent_os.client import AgentOS
+import protol.integrations.langchain as _lc_mod
+from protol.client import Protol
 
 
 class MockRunnable:
@@ -44,7 +44,7 @@ class TestLangChainWrapper:
 
     @pytest.fixture
     def aos_and_agent(self):
-        aos = AgentOS(api_key="test", local_mode=True)
+        aos = Protol(api_key="test", local_mode=True)
         agent = aos.register_agent(
             name="lc-test-agent",
             category="research",
@@ -56,7 +56,7 @@ class TestLangChainWrapper:
     def test_invoke_logs_success(self, aos_and_agent):
         aos, agent = aos_and_agent
         # Import directly to avoid langchain_core dependency
-        from agent_os.integrations.langchain import LangChainWrapper
+        from protol.integrations.langchain import LangChainWrapper
 
         wrapper = LangChainWrapper(
             runnable=MockRunnable(),
@@ -74,7 +74,7 @@ class TestLangChainWrapper:
 
     def test_invoke_logs_failure(self, aos_and_agent):
         aos, agent = aos_and_agent
-        from agent_os.integrations.langchain import LangChainWrapper
+        from protol.integrations.langchain import LangChainWrapper
 
         wrapper = LangChainWrapper(
             runnable=MockFailingRunnable(),
@@ -91,7 +91,7 @@ class TestLangChainWrapper:
 
     def test_batch_logs_each(self, aos_and_agent):
         aos, agent = aos_and_agent
-        from agent_os.integrations.langchain import LangChainWrapper
+        from protol.integrations.langchain import LangChainWrapper
 
         wrapper = LangChainWrapper(
             runnable=MockRunnable(),
@@ -107,7 +107,7 @@ class TestLangChainWrapper:
 
     def test_stream_logs_after_completion(self, aos_and_agent):
         aos, agent = aos_and_agent
-        from agent_os.integrations.langchain import LangChainWrapper
+        from protol.integrations.langchain import LangChainWrapper
 
         wrapper = LangChainWrapper(
             runnable=MockRunnable(),

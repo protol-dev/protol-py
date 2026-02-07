@@ -1,52 +1,52 @@
-"""Tests for the AgentOS client."""
+"""Tests for the Protol client."""
 
 from __future__ import annotations
 
 import pytest
 
-from agent_os.client import AgentOS, AsyncAgentOS
-from agent_os.exceptions import ValidationError, NotFoundError
-from agent_os.models import AgentProfile, EcosystemStats, SearchResult
+from protol.client import Protol, AsyncProtol
+from protol.exceptions import ValidationError, NotFoundError
+from protol.models import AgentProfile, EcosystemStats, SearchResult
 
 
-class TestAgentOSInit:
+class TestProtolInit:
     def test_local_mode_accepts_any_key(self):
-        aos = AgentOS(api_key="any_key", local_mode=True)
-        assert aos._local_mode is True
-        aos.close()
+        p = Protol(api_key="any_key", local_mode=True)
+        assert p._local_mode is True
+        p.close()
 
     def test_invalid_api_key_raises(self):
         with pytest.raises(ValidationError, match="Invalid API key"):
-            AgentOS(api_key="bad_key")
+            Protol(api_key="bad_key")
 
     def test_valid_api_key_accepted(self, httpx_mock):
         # With a valid key format, should instantiate without error
         # (no actual HTTP call in constructor)
-        aos = AgentOS(api_key="aos_sk_12345678901234567890")
-        aos.close()
+        p = Protol(api_key="aos_sk_12345678901234567890")
+        p.close()
 
     def test_default_environment(self):
-        aos = AgentOS(api_key="test", local_mode=True)
-        assert aos._environment == "production"
-        aos.close()
+        p = Protol(api_key="test", local_mode=True)
+        assert p._environment == "production"
+        p.close()
 
     def test_custom_environment(self):
-        aos = AgentOS(api_key="test", local_mode=True, environment="staging")
-        assert aos._environment == "staging"
-        aos.close()
+        p = Protol(api_key="test", local_mode=True, environment="staging")
+        assert p._environment == "staging"
+        p.close()
 
 
-class TestAgentOSContextManager:
+class TestProtolContextManager:
     def test_context_manager(self):
-        with AgentOS(api_key="test", local_mode=True) as aos:
-            agent = aos.register_agent(
+        with Protol(api_key="test", local_mode=True) as p:
+            agent = p.register_agent(
                 name="ctx-agent", category="research", capabilities=["test"]
             )
             assert agent.id.startswith("agt_")
         # Should not raise after close
 
 
-class TestAgentOSRegister:
+class TestProtolRegister:
     def test_register_agent(self, aos_local):
         agent = aos_local.register_agent(
             name="my-agent",
@@ -77,7 +77,7 @@ class TestAgentOSRegister:
             )
 
 
-class TestAgentOSGetAgent:
+class TestProtolGetAgent:
     def test_get_existing_agent(self, aos_local):
         created = aos_local.register_agent(
             name="existing", category="coding", capabilities=["python"]
@@ -91,7 +91,7 @@ class TestAgentOSGetAgent:
             aos_local.get_agent("agt_nonexistent")
 
 
-class TestAgentOSUpdate:
+class TestProtolUpdate:
     def test_update_agent(self, aos_local):
         agent = aos_local.register_agent(
             name="updatable", category="research", capabilities=["test"]
@@ -100,7 +100,7 @@ class TestAgentOSUpdate:
         assert profile.description == "New description"
 
 
-class TestAgentOSLookup:
+class TestProtolLookup:
     def test_lookup_returns_profile(self, aos_local):
         agent = aos_local.register_agent(
             name="lookupable", category="general", capabilities=["chat"]
@@ -110,7 +110,7 @@ class TestAgentOSLookup:
         assert profile.agent_id == agent.id
 
 
-class TestAgentOSSearch:
+class TestProtolSearch:
     def test_search_by_category(self, aos_local):
         aos_local.register_agent(
             name="search-r", category="research", capabilities=["test"]
@@ -123,7 +123,7 @@ class TestAgentOSSearch:
         assert all(a.category == "research" for a in results.agents)
 
 
-class TestAgentOSLeaderboard:
+class TestProtolLeaderboard:
     def test_leaderboard(self, aos_local):
         for i in range(3):
             aos_local.register_agent(
@@ -133,7 +133,7 @@ class TestAgentOSLeaderboard:
         assert len(leaders) == 3
 
 
-class TestAgentOSEcosystemStats:
+class TestProtolEcosystemStats:
     def test_ecosystem_stats(self, aos_local):
         aos_local.register_agent(
             name="stats-agent", category="research", capabilities=["test"]
@@ -143,7 +143,7 @@ class TestAgentOSEcosystemStats:
         assert stats.total_agents >= 1
 
 
-class TestAgentOSReportIncident:
+class TestProtolReportIncident:
     def test_report_incident(self, aos_local):
         agent = aos_local.register_agent(
             name="inc-agent", category="general", capabilities=["chat"]
@@ -171,7 +171,7 @@ class TestAgentOSReportIncident:
             )
 
 
-class TestAgentOSListMyAgents:
+class TestProtolListMyAgents:
     def test_list_empty(self, aos_local):
         agents = aos_local.list_my_agents()
         assert agents == []
@@ -185,30 +185,30 @@ class TestAgentOSListMyAgents:
 
 class TestEnvironmentPropagation:
     def test_environment_flows_to_agent(self):
-        aos = AgentOS(api_key="test", local_mode=True, environment="test")
-        agent = aos.register_agent(
+        p = Protol(api_key="test", local_mode=True, environment="test")
+        agent = p.register_agent(
             name="env-agent", category="research", capabilities=["test"]
         )
         # Action should default to "test" environment
         action = agent.action(task_category="research")
         assert action._environment == "test"
-        aos.close()
+        p.close()
 
     def test_environment_overridable_per_action(self):
-        aos = AgentOS(api_key="test", local_mode=True, environment="production")
-        agent = aos.register_agent(
+        p = Protol(api_key="test", local_mode=True, environment="production")
+        agent = p.register_agent(
             name="env-agent-2", category="research", capabilities=["test"]
         )
         action = agent.action(task_category="research", environment="staging")
         assert action._environment == "staging"
-        aos.close()
+        p.close()
 
 
-class TestAsyncAgentOS:
+class TestAsyncProtol:
     @pytest.mark.asyncio
     async def test_async_local_mode(self):
-        async with AsyncAgentOS(api_key="test", local_mode=True) as aos:
-            agent = await aos.register_agent(
+        async with AsyncProtol(api_key="test", local_mode=True) as p:
+            agent = await p.register_agent(
                 name="async-agent", category="research", capabilities=["test"]
             )
             assert agent.id.startswith("agt_")
@@ -216,22 +216,22 @@ class TestAsyncAgentOS:
     @pytest.mark.asyncio
     async def test_async_invalid_key(self):
         with pytest.raises(ValidationError):
-            AsyncAgentOS(api_key="bad_key")
+            AsyncProtol(api_key="bad_key")
 
     @pytest.mark.asyncio
     async def test_async_search(self):
-        async with AsyncAgentOS(api_key="test", local_mode=True) as aos:
-            await aos.register_agent(
+        async with AsyncProtol(api_key="test", local_mode=True) as p:
+            await p.register_agent(
                 name="async-search", category="coding", capabilities=["python"]
             )
-            results = await aos.search_agents(category="coding")
+            results = await p.search_agents(category="coding")
             assert isinstance(results, SearchResult)
 
     @pytest.mark.asyncio
     async def test_async_ecosystem_stats(self):
-        async with AsyncAgentOS(api_key="test", local_mode=True) as aos:
-            await aos.register_agent(
+        async with AsyncProtol(api_key="test", local_mode=True) as p:
+            await p.register_agent(
                 name="async-stats", category="general", capabilities=["test"]
             )
-            stats = await aos.get_ecosystem_stats()
+            stats = await p.get_ecosystem_stats()
             assert stats.total_agents >= 1

@@ -1,6 +1,6 @@
-"""Main AgentOS client classes (sync and async).
+"""Main Protol client classes (sync and async).
 
-Entry points for the SDK. Developers instantiate AgentOS or AsyncAgentOS first.
+Entry points for the SDK. Developers instantiate Protol or AsyncProtol first.
 """
 
 from __future__ import annotations
@@ -8,15 +8,15 @@ from __future__ import annotations
 import logging
 from typing import Any, Optional, Union
 
-from agent_os._utils import validate_api_key
-from agent_os.agent import Agent
-from agent_os.constants import (
+from protol._utils import validate_api_key
+from protol.agent import Agent
+from protol.constants import (
     DEFAULT_BASE_URL,
     DEFAULT_MAX_RETRIES,
     DEFAULT_TIMEOUT,
 )
-from agent_os.exceptions import ValidationError
-from agent_os.models import (
+from protol.exceptions import ValidationError
+from protol.models import (
     AgentProfile,
     AgentRegistration,
     AgentUpdate,
@@ -27,27 +27,27 @@ from agent_os.models import (
     SearchResult,
 )
 
-logger = logging.getLogger("agent_os")
+logger = logging.getLogger("protol")
 
 
-class AgentOS:
+class Protol:
     """Main client for the Protol platform.
 
     Usage::
 
-        aos = AgentOS(api_key="aos_sk_...")
-        agent = aos.register_agent(
+        p = Protol(api_key="aos_sk_...")
+        agent = p.register_agent(
             name="my-agent", category="research", capabilities=["web_research"]
         )
 
         # Or connect to existing agent
-        agent = aos.get_agent("agt_7x9k2m")
+        agent = p.get_agent("agt_7x9k2m")
 
         # Local mode (no backend needed):
-        aos = AgentOS(api_key="test", local_mode=True)
+        p = Protol(api_key="test", local_mode=True)
 
     Args:
-        api_key: Your AgentOS owner API key (starts with 'aos_sk_').
+        api_key: Your Protol owner API key (starts with 'aos_sk_').
         base_url: API base URL (override for self-hosted or testing).
         timeout: Request timeout in seconds.
         max_retries: Max retry attempts for failed requests.
@@ -72,17 +72,17 @@ class AgentOS:
         self._local_mode = local_mode
 
         if local_mode:
-            from agent_os._local_store import LocalStore
+            from protol._local_store import LocalStore
 
             self._client: Any = LocalStore(owner_id=f"owner_{api_key[:8]}")
-            logger.info("AgentOS initialized in local mode (no HTTP calls).")
+            logger.info("Protol initialized in local mode (no HTTP calls).")
         else:
             if not validate_api_key(api_key):
                 raise ValidationError(
                     message="Invalid API key format. Must start with 'aos_sk_' "
                     "followed by at least 20 characters."
                 )
-            from agent_os._http import HttpClient
+            from protol._http import HttpClient
 
             self._client = HttpClient(
                 api_key=api_key,
@@ -90,7 +90,7 @@ class AgentOS:
                 timeout=timeout,
                 max_retries=max_retries,
             )
-            logger.info("AgentOS initialized (base_url=%s).", base_url)
+            logger.info("Protol initialized (base_url=%s).", base_url)
 
     def register_agent(
         self,
@@ -315,22 +315,26 @@ class AgentOS:
         """Close the HTTP client. Call when done."""
         self._client.close()
 
-    def __enter__(self) -> AgentOS:
+    def __enter__(self) -> Protol:
         return self
 
     def __exit__(self, *args: Any) -> None:
         self.close()
 
 
-class AsyncAgentOS:
+# Backward-compatibility aliases
+AgentOS = Protol
+
+
+class AsyncProtol:
     """Async client for the Protol platform.
 
-    Mirrors ``AgentOS`` with all methods as ``async def``.
+    Mirrors ``Protol`` with all methods as ``async def``.
 
     Usage::
 
-        async with AsyncAgentOS(api_key="aos_sk_...") as aos:
-            agent = await aos.register_agent(
+        async with AsyncProtol(api_key="aos_sk_...") as p:
+            agent = await p.register_agent(
                 name="my-agent", category="research", capabilities=["web_research"]
             )
     """
@@ -349,17 +353,17 @@ class AsyncAgentOS:
         self._local_mode = local_mode
 
         if local_mode:
-            from agent_os._local_store import LocalStore
+            from protol._local_store import LocalStore
 
             self._client: Any = LocalStore(owner_id=f"owner_{api_key[:8]}")
-            logger.info("AsyncAgentOS initialized in local mode.")
+            logger.info("AsyncProtol initialized in local mode.")
         else:
             if not validate_api_key(api_key):
                 raise ValidationError(
                     message="Invalid API key format. Must start with 'aos_sk_' "
                     "followed by at least 20 characters."
                 )
-            from agent_os._http import AsyncHttpClient
+            from protol._http import AsyncHttpClient
 
             self._client = AsyncHttpClient(
                 api_key=api_key,
@@ -563,8 +567,12 @@ class AsyncAgentOS:
             if hasattr(result, "__await__"):
                 await result
 
-    async def __aenter__(self) -> AsyncAgentOS:
+    async def __aenter__(self) -> AsyncProtol:
         return self
 
     async def __aexit__(self, *args: Any) -> None:
         await self.close()
+
+
+# Backward-compatibility alias
+AsyncAgentOS = AsyncProtol

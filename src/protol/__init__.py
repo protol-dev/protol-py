@@ -1,13 +1,13 @@
-"""AgentOS Python SDK — The civilization layer for AI agents.
+"""Protol Python SDK — The civilization layer for AI agents.
 
 Provides identity, action tracking, and reputation scoring for AI agents.
 
 Quick start::
 
-    from agent_os import AgentOS
+    from protol import Protol
 
-    aos = AgentOS(api_key="aos_sk_...", local_mode=True)
-    agent = aos.register_agent(
+    p = Protol(api_key="aos_sk_...", local_mode=True)
+    agent = p.register_agent(
         name="my-agent", category="research", capabilities=["web_research"]
     )
 
@@ -18,13 +18,13 @@ Quick start::
     print(f"Score: {agent.reputation_score} | Tier: {agent.trust_tier}")
 """
 
-from agent_os.action import Action
-from agent_os.agent import Agent
-from agent_os.client import AgentOS, AsyncAgentOS
-from agent_os.constants import SDK_VERSION as __version__
-from agent_os.exceptions import (
+from protol.action import Action
+from protol.agent import Agent
+from protol.client import Protol, AsyncProtol
+from protol.constants import SDK_VERSION as __version__
+from protol.exceptions import (
     ActionError,
-    AgentOSError,
+    ProtolError,
     AuthenticationError,
     NetworkError,
     NotFoundError,
@@ -32,7 +32,7 @@ from agent_os.exceptions import (
     ServerError,
     ValidationError,
 )
-from agent_os.models import (
+from protol.models import (
     ActionResponse,
     AgentProfile,
     AgentReputation,
@@ -44,8 +44,16 @@ from agent_os.models import (
     SearchResult,
 )
 
+# Backward-compatibility aliases
+AgentOS = Protol
+AsyncAgentOS = AsyncProtol
+AgentOSError = ProtolError
+
 __all__ = [
     # Client
+    "Protol",
+    "AsyncProtol",
+    # Backward-compat aliases
     "AgentOS",
     "AsyncAgentOS",
     # Core classes
@@ -62,6 +70,7 @@ __all__ = [
     "LeaderboardEntry",
     "EcosystemStats",
     # Exceptions
+    "ProtolError",
     "AgentOSError",
     "AuthenticationError",
     "NotFoundError",

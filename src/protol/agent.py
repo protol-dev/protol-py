@@ -1,4 +1,4 @@
-"""Agent class for the AgentOS SDK.
+"""Agent class for the Protol SDK.
 
 Represents a registered agent and provides action logging and reputation querying.
 """
@@ -9,8 +9,8 @@ import logging
 from datetime import datetime, timezone
 from typing import Any, Optional, Union
 
-from agent_os.action import Action
-from agent_os.models import (
+from protol.action import Action
+from protol.models import (
     ActionRecord,
     ActionResponse,
     AgentProfile,
@@ -19,13 +19,13 @@ from agent_os.models import (
     ReputationHistory,
 )
 
-logger = logging.getLogger("agent_os")
+logger = logging.getLogger("protol")
 
 
 class Agent:
     """Represents a registered agent. Use this to log actions and query reputation.
 
-    Created via ``AgentOS.register_agent()`` or ``AgentOS.get_agent()``.
+    Created via ``Protol.register_agent()`` or ``Protol.get_agent()``.
     Do not instantiate directly.
     """
 

@@ -1,4 +1,4 @@
-"""AgentOS SDK constants and default configuration."""
+"""Protol SDK constants and default configuration."""
 
 from __future__ import annotations
 

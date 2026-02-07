@@ -5,8 +5,8 @@ from __future__ import annotations
 import pytest
 from unittest.mock import MagicMock
 
-import agent_os.integrations.crewai as _crew_mod
-from agent_os.client import AgentOS
+import protol.integrations.crewai as _crew_mod
+from protol.client import Protol
 
 
 class MockCrew:
@@ -31,7 +31,7 @@ class TestCrewAIWrapper:
 
     @pytest.fixture
     def setup(self):
-        aos = AgentOS(api_key="test", local_mode=True)
+        aos = Protol(api_key="test", local_mode=True)
         researcher = aos.register_agent(
             name="crew-researcher",
             category="research",
@@ -47,7 +47,7 @@ class TestCrewAIWrapper:
 
     def test_kickoff_logs_actions(self, setup):
         aos, researcher, writer = setup
-        from agent_os.integrations.crewai import CrewAIWrapper
+        from protol.integrations.crewai import CrewAIWrapper
 
         wrapper = CrewAIWrapper(
             crew=MockCrew(),
@@ -68,7 +68,7 @@ class TestCrewAIWrapper:
 
     def test_kickoff_failure_logs_errors(self, setup):
         aos, researcher, writer = setup
-        from agent_os.integrations.crewai import CrewAIWrapper
+        from protol.integrations.crewai import CrewAIWrapper
 
         wrapper = CrewAIWrapper(
             crew=MockFailingCrew(),

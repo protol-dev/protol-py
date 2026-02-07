@@ -1,4 +1,4 @@
-"""Pydantic v2 models for the AgentOS SDK."""
+"""Pydantic v2 models for the Protol SDK."""
 
 from __future__ import annotations
 
@@ -7,7 +7,7 @@ from typing import Any, Optional
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-from agent_os.constants import (
+from protol.constants import (
     VALID_ACTION_STATUSES,
     VALID_ACTION_TYPES,
     VALID_AGENT_CATEGORIES,

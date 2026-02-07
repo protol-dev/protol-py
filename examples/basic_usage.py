@@ -1,12 +1,12 @@
 """Basic usage example — runs fully offline with local_mode=True."""
 
-from agent_os import AgentOS
+from protol import Protol
 
 # Initialize in local mode (no backend needed)
-aos = AgentOS(api_key="test", local_mode=True, environment="development")
+p = Protol(api_key="test", local_mode=True, environment="development")
 
 # Register an agent
-agent = aos.register_agent(
+agent = p.register_agent(
     name="demo-research-agent",
     category="research",
     capabilities=["web_research", "summarization"],
@@ -47,15 +47,15 @@ print(f"Breakdown: reliability={breakdown.reliability}, safety={breakdown.safety
       f"transparency={breakdown.transparency}")
 
 # --- Search the ecosystem ---
-results = aos.search_agents(category="research")
+results = p.search_agents(category="research")
 print(f"\nSearch found {results.total} agent(s)")
 for ap in results.agents:
     print(f"  {ap.name}: score={ap.reputation.overall_score}, tier={ap.reputation.trust_tier}")
 
 # --- Look up agent profile (read-only) ---
-profile = aos.lookup(agent.id)
+profile = p.lookup(agent.id)
 print(f"\nProfile: {profile.name}, created={profile.created_at}")
 
 # Clean up
-aos.close()
+p.close()
 print("\nDone!")

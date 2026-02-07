@@ -1,4 +1,4 @@
-"""LangChain integration for the AgentOS SDK.
+"""LangChain integration for the Protol SDK.
 
 Wraps any LangChain Runnable with automatic action logging.
 """
@@ -8,10 +8,10 @@ from __future__ import annotations
 import logging
 from typing import Any, Iterator, Optional
 
-from agent_os._utils import calculate_size_bytes, hash_data
-from agent_os.agent import Agent
+from protol._utils import calculate_size_bytes, hash_data
+from protol.agent import Agent
 
-logger = logging.getLogger("agent_os")
+logger = logging.getLogger("protol")
 
 try:
     from langchain_core.runnables import Runnable  # type: ignore[import-untyped]
@@ -20,20 +20,20 @@ except ImportError:
 
 _MISSING_MSG = (
     "LangChain integration requires langchain-core. "
-    "Install it with: pip install 'agent-os-sdk[langchain]'"
+    "Install it with: pip install 'protol-sdk[langchain]'"
 )
 
 
 class LangChainWrapper:
-    """Wraps any LangChain Runnable/Agent with automatic AgentOS action logging.
+    """Wraps any LangChain Runnable/Agent with automatic Protol action logging.
 
     Usage::
 
-        from agent_os.integrations import LangChainWrapper
+        from protol.integrations import LangChainWrapper
 
         tracked = LangChainWrapper(
             runnable=my_langchain_agent,
-            agent=my_aos_agent,
+            agent=my_protol_agent,
             task_category="research",
         )
 
@@ -54,7 +54,7 @@ class LangChainWrapper:
 
         Args:
             runnable: Any LangChain Runnable (chain, agent, LLM, etc.).
-            agent: AgentOS Agent instance.
+            agent: Protol Agent instance.
             task_category: Default task category for logged actions.
             commissioned_by: Who commissioned the work.
             environment: Override the agent's default environment.

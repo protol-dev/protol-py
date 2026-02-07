@@ -1,4 +1,4 @@
-"""CrewAI integration for the AgentOS SDK.
+"""CrewAI integration for the Protol SDK.
 
 Wraps a CrewAI Crew with automatic action logging for all crew members.
 """
@@ -8,9 +8,9 @@ from __future__ import annotations
 import logging
 from typing import Any, Dict, Optional
 
-from agent_os.agent import Agent
+from protol.agent import Agent
 
-logger = logging.getLogger("agent_os")
+logger = logging.getLogger("protol")
 
 try:
     from crewai import Crew  # type: ignore[import-untyped]
@@ -19,16 +19,16 @@ except ImportError:
 
 _MISSING_MSG = (
     "CrewAI integration requires crewai. "
-    "Install it with: pip install 'agent-os-sdk[crewai]'"
+    "Install it with: pip install 'protol-sdk[crewai]'"
 )
 
 
 class CrewAIWrapper:
-    """Wraps a CrewAI Crew with automatic AgentOS action logging for all crew members.
+    """Wraps a CrewAI Crew with automatic Protol action logging for all crew members.
 
     Usage::
 
-        from agent_os.integrations import CrewAIWrapper
+        from protol.integrations import CrewAIWrapper
 
         tracked_crew = CrewAIWrapper(
             crew=my_crew,
@@ -52,7 +52,7 @@ class CrewAIWrapper:
 
         Args:
             crew: CrewAI Crew instance.
-            agent_mapping: Mapping of CrewAI agent role names to AgentOS Agent instances.
+            agent_mapping: Mapping of CrewAI agent role names to Protol Agent instances.
             environment: Override the default environment.
         """
         if Crew is None:
@@ -65,7 +65,7 @@ class CrewAIWrapper:
         """Run the crew and log all agent actions.
 
         Each task in the crew is logged as an action for the corresponding
-        AgentOS agent (matched by role name in agent_mapping).
+        Protol agent (matched by role name in agent_mapping).
 
         Args:
             inputs: Optional inputs dict to pass to the crew.

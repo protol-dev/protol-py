@@ -1,8 +1,8 @@
-from agent_os import AgentOS
+from protol import Protol
 
-aos = AgentOS(api_key="test", local_mode=True)
+p = Protol(api_key="test", local_mode=True)
 
-agent = aos.register_agent(
+agent = p.register_agent(
     name="shravan-agent",
     category="research",
     capabilities=["web_research", "summarization"],
@@ -25,4 +25,4 @@ print(f"Score after: {agent.reputation_score}")
 print(f"Tier: {agent.trust_tier}")
 print(f"Breakdown: {agent.reputation_breakdown()}")
 
-aos.close()
+p.close()

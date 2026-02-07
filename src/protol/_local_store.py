@@ -1,4 +1,4 @@
-"""In-memory local store for the AgentOS SDK local_mode.
+"""In-memory local store for the Protol SDK local_mode.
 
 Drop-in replacement for HttpClient. Stores agents, actions, and incidents in
 memory with full 5-dimension reputation scoring.
@@ -17,7 +17,7 @@ from collections import defaultdict
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
-from agent_os.constants import VALID_SEVERITY_LEVELS
+from protol.constants import VALID_SEVERITY_LEVELS
 
 
 def _random_id(prefix: str, length: int = 8) -> str:
@@ -36,7 +36,7 @@ def _now_iso() -> str:
 
 
 class LocalStore:
-    """In-memory store that mirrors the AgentOS HTTP API contract.
+    """In-memory store that mirrors the Protol HTTP API contract.
 
     Provides get/post/patch/delete methods matching HttpClient's interface so
     it can be used as a drop-in replacement when ``local_mode=True``.
@@ -141,7 +141,7 @@ class LocalStore:
                 action_id = action_match.group(1)
                 return self._rate_action(agent_id, action_id, json or {})
 
-        from agent_os.exceptions import NotFoundError
+        from protol.exceptions import NotFoundError
 
         raise NotFoundError(message=f"No local handler for {method} {path}")
 
@@ -195,7 +195,7 @@ class LocalStore:
 
     def _get_agent(self, agent_id: str) -> Dict[str, Any]:
         if agent_id not in self._agents:
-            from agent_os.exceptions import NotFoundError
+            from protol.exceptions import NotFoundError
 
             raise NotFoundError(message=f"Agent '{agent_id}' not found.")
         return self._agents[agent_id]
@@ -282,7 +282,7 @@ class LocalStore:
                 self._recompute_reputation(agent_id)
                 return action
 
-        from agent_os.exceptions import NotFoundError
+        from protol.exceptions import NotFoundError
 
         raise NotFoundError(message=f"Action '{action_id}' not found.")
 

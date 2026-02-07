@@ -11,11 +11,11 @@ import threading
 from datetime import datetime, timezone
 from typing import Any, Optional, Union
 
-from agent_os._utils import calculate_size_bytes, hash_data
-from agent_os.exceptions import ActionError
-from agent_os.models import ActionRecord, ActionResponse
+from protol._utils import calculate_size_bytes, hash_data
+from protol.exceptions import ActionError
+from protol.models import ActionRecord, ActionResponse
 
-logger = logging.getLogger("agent_os")
+logger = logging.getLogger("protol")
 
 
 class Action:
@@ -257,7 +257,7 @@ class Action:
                 message="Cannot rate an action that hasn't been recorded yet."
             )
 
-        from agent_os.models import ActionRating
+        from protol.models import ActionRating
 
         ActionRating(rating=rating, feedback=feedback)  # Validate
 
@@ -342,7 +342,7 @@ class Action:
 
         try:
             # For local_mode (LocalStore) we post synchronously as it's instant
-            from agent_os._local_store import LocalStore
+            from protol._local_store import LocalStore
 
             if isinstance(self._client, LocalStore):
                 data = self._client.post(

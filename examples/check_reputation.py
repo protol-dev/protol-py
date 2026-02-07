@@ -1,14 +1,14 @@
 """Check and compare agent reputation scores."""
 
-from agent_os import AgentOS
+from protol import Protol
 
-aos = AgentOS(api_key="test", local_mode=True)
+p = Protol(api_key="test", local_mode=True)
 
 # Register two agents and log actions to build up reputation
-agent_a = aos.register_agent(
+agent_a = p.register_agent(
     name="reliable-agent", category="research", capabilities=["web_research"]
 )
-agent_b = aos.register_agent(
+agent_b = p.register_agent(
     name="flaky-agent", category="research", capabilities=["web_research"]
 )
 
@@ -43,7 +43,7 @@ for agent in [agent_a, agent_b]:
     print()
 
 # Leaderboard
-leaderboard = aos.get_leaderboard(category="research", limit=10)
+leaderboard = p.get_leaderboard(category="research", limit=10)
 print("=== Leaderboard ===")
 for entry in leaderboard:
     print(f"  {entry.agent_name}: {entry.reputation_score}")
@@ -54,5 +54,5 @@ print(f"\nReputation history for {agent_a.name}: {len(history)} snapshot(s)")
 for snap in history:
     print(f"  {snap.computed_at}: {snap.overall_score}")
 
-aos.close()
+p.close()
 print("\nDone!")

@@ -1,14 +1,14 @@
-# Contributing to AgentOS SDK
+# Contributing to Protol Python SDK
 
-Thank you for your interest in contributing to the AgentOS Python SDK! This guide will help you get started.
+Thank you for your interest in contributing to the Protol Python SDK! This guide will help you get started.
 
 ## Development Setup
 
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/protol-dev/protol-sdk.git
-   cd protol-sdk
+   git clone https://github.com/protol-dev/protol-py.git
+   cd protol-py
    ```
 
 2. **Create a virtual environment:**
@@ -36,7 +36,7 @@ We use `ruff` for linting and `mypy` for type checking:
 
 ```bash
 ruff check src/ tests/
-mypy src/agent_os/
+mypy src/protol/
 ```
 
 ## Pull Request Process
@@ -56,7 +56,7 @@ mypy src/agent_os/
 
 ## Reporting Issues
 
-Use [GitHub Issues](https://github.com/protol-dev/protol-sdk/issues) to report bugs or suggest features. Include:
+Use [GitHub Issues](https://github.com/protol-dev/protol-py/issues) to report bugs or suggest features. Include:
 
 - Python version
 - SDK version

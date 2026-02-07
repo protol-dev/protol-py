@@ -1,4 +1,4 @@
-"""Internal utility functions for the AgentOS SDK."""
+"""Internal utility functions for the Protol SDK."""
 
 from __future__ import annotations
 

@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from agent_os.agent import Agent
-from agent_os.models import AgentProfile, ReputationBreakdown, ReputationHistory
+from protol.agent import Agent
+from protol.models import AgentProfile, ReputationBreakdown, ReputationHistory
 
 
 class TestAgentProperties:
@@ -40,7 +40,7 @@ class TestAgentMethods:
         assert result.id == sample_local_agent.id
 
     def test_action_returns_context_manager(self, sample_local_agent):
-        from agent_os.action import Action
+        from protol.action import Action
 
         action = sample_local_agent.action(task_category="research")
         assert isinstance(action, Action)

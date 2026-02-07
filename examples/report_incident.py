@@ -1,11 +1,11 @@
 """Report an incident against an agent."""
 
-from agent_os import AgentOS
+from protol import Protol
 
-aos = AgentOS(api_key="test", local_mode=True)
+p = Protol(api_key="test", local_mode=True)
 
 # Register an agent
-agent = aos.register_agent(
+agent = p.register_agent(
     name="suspect-agent",
     category="content_generation",
     capabilities=["text_generation"],
@@ -18,7 +18,7 @@ for i in range(5):
         act.success(output={"text": f"content-{i}"}, confidence=0.8, cost_usd=0.02)
 
 # Report an incident
-incident = aos.report_incident(
+incident = p.report_incident(
     agent_id=agent.id,
     incident_type="hallucination",
     severity="high",
@@ -35,7 +35,7 @@ print(f"  Severity: {incident.severity}")
 print(f"  Status: {incident.status}")
 
 # Report a second incident (lower severity)
-incident2 = aos.report_incident(
+incident2 = p.report_incident(
     agent_id=agent.id,
     incident_type="data_leak",
     severity="medium",
@@ -57,5 +57,5 @@ print(f"\nTotal incidents: {len(incidents)}")
 for inc in incidents:
     print(f"  [{inc.severity}] {inc.title} — {inc.status}")
 
-aos.close()
+p.close()
 print("\nDone!")

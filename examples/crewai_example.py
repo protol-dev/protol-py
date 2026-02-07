@@ -1,15 +1,15 @@
 """CrewAI integration example.
 
-Install: pip install 'agent-os-sdk[crewai]' crewai
+Install: pip install 'protol-py[crewai]' crewai
 
-This example shows how CrewAIWrapper maps crew members to AgentOS agents
+This example shows how CrewAIWrapper maps crew members to Protol agents
 so each member's actions are individually tracked.
 """
 
 from __future__ import annotations
 
-from agent_os import AgentOS
-from agent_os.integrations import CrewAIWrapper
+from protol import Protol
+from protol.integrations import CrewAIWrapper
 
 # --- Minimal mock crew so the example runs without crewai installed ---
 class MockCrewOutput:
@@ -24,15 +24,15 @@ class MockCrew:
         return MockCrewOutput()
 
 # --- Initialize ---
-aos = AgentOS(api_key="test", local_mode=True)
+p = Protol(api_key="test", local_mode=True)
 
-researcher = aos.register_agent(
+researcher = p.register_agent(
     name="researcher",
     category="research",
     capabilities=["web_research", "analysis"],
     framework="crewai",
 )
-writer = aos.register_agent(
+writer = p.register_agent(
     name="writer",
     category="writing",
     capabilities=["content_writing", "editing"],
@@ -59,5 +59,5 @@ for agent in [researcher, writer]:
     print(f"  Actions: {agent.total_actions}")
     print(f"  Reputation: {agent.reputation_score} ({agent.trust_tier})")
 
-aos.close()
+p.close()
 print("\nDone!")
