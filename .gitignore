@@ -1,0 +1,22 @@
+cat > .gitignore << 'EOF'
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.venv/
+venv/
+env/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+*.so
+.DS_Store
+*.swp
+*.swo
+.env
+.env.local
+agent-os-sdk-prompt.md
+EOF
